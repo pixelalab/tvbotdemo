@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+
+<body>
+<div>
+web bot テスト
+
+<div>
+<iframe id="chatframe" src="https://webchat.botframework.com/embed/pixbot_tvrankbeta" style="width : 600px; height: 502px; max-height: 502px;"></iframe>
+</div>
+
+<script language="Javascript">
+	//global parameters
+	params ="";
+	updated = false;
+
+	function getparams() {
+	  if (!updated) {
+	    if (window.location.search) { //URL
+	      params = window.location.search.substring(1, window.location.search.length); //URLから?以降の文字列抜き出す
+	    }
+	    updated = true;
+	  }
+	}
+
+	window.onload = function onLoad() {
+	  updated = false; //loadし直したら一応フラグ初期化。
+	}
+
+	$("#chatframe").bind("error load", function() {
+	  if ($(this).attr('id') != 'loaded') { //idが書き換わっていないもの
+	    getparams();
+	    var substr = "";
+	    if (params != "") {
+	      substr = "?" + params;
+	    }
+	    var src = $(this).attr('src') + substr;
+	    $(this).attr('id', 'loaded'); //id書き換えて、何度も処理しないように
+	    $(this).attr('src', src);  //srcを書き換える
+	  }
+	});
+</script>
+</body>
+</html>
